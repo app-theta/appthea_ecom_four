@@ -6,6 +6,7 @@ import MobileNav from "./MobileNav.jsx";
 import CartDrawer from "./CartDrawer.jsx";
 import MenuDrawer from "./MenuDrawer.jsx";
 import QuickView from "./QuickView.jsx";
+import NewsletterPopup from "./NewsletterPopup.jsx";
 import { useUI } from "../context/UIContext.jsx";
 
 export default function Layout() {
@@ -24,6 +25,7 @@ export default function Layout() {
       <CartDrawer />
       <MenuDrawer />
       <QuickView />
+      <NewsletterPopup />
     </>
   );
 }

@@ -10,17 +10,26 @@ import "swiper/css/pagination";
 import "./styles/style.css";
 
 import App from "./App.jsx";
+import { BusinessProvider } from "./context/BusinessContext.jsx";
+import { AuthProvider } from "./context/AuthContext.jsx";
+import { WishlistProvider } from "./context/WishlistContext.jsx";
 import { CartProvider } from "./context/CartContext.jsx";
 import { UIProvider } from "./context/UIContext.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <BrowserRouter>
-      <CartProvider>
-        <UIProvider>
-          <App />
-        </UIProvider>
-      </CartProvider>
+      <BusinessProvider>
+        <AuthProvider>
+          <WishlistProvider>
+            <CartProvider>
+              <UIProvider>
+                <App />
+              </UIProvider>
+            </CartProvider>
+          </WishlistProvider>
+        </AuthProvider>
+      </BusinessProvider>
     </BrowserRouter>
   </React.StrictMode>
 );

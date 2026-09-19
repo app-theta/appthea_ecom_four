@@ -1,10 +1,12 @@
 import { Link, useLocation } from "react-router-dom";
 import { useCart } from "../context/CartContext.jsx";
 import { useUI } from "../context/UIContext.jsx";
+import { useAuth } from "../context/AuthContext.jsx";
 
 export default function MobileNav() {
   const cart = useCart();
   const { setMenuOpen, setCartOpen } = useUI();
+  const { isAuthed } = useAuth();
   const { pathname } = useLocation();
 
   return (
@@ -21,7 +23,11 @@ export default function MobileNav() {
       <a href="#" onClick={(e) => { e.preventDefault(); setCartOpen(true); }}>
         <i className="bi bi-cart2"></i><span className="badge-count">{cart.count}</span><span>Cart</span>
       </a>
-      <Link to="/login"><i className="bi bi-person"></i><span>Login</span></Link>
+      {isAuthed ? (
+        <Link to="/account"><i className="bi bi-person"></i><span>Account</span></Link>
+      ) : (
+        <Link to="/login"><i className="bi bi-person"></i><span>Login</span></Link>
+      )}
     </nav>
   );
 }

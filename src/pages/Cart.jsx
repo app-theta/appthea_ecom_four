@@ -1,10 +1,12 @@
 import { Link } from "react-router-dom";
-import { money } from "../data/site.js";
+import { money } from "../utils/format.js";
 import { useCart } from "../context/CartContext.jsx";
+import { useBusiness } from "../context/BusinessContext.jsx";
 import CartLine from "../components/CartLine.jsx";
 
 export default function Cart() {
   const cart = useCart();
+  const { currencySymbol } = useBusiness();
 
   return (
     <section className="section">
@@ -45,9 +47,9 @@ export default function Cart() {
             <div className="panel">
               <div className="panel-head"><h5>Order Summary</h5></div>
               <div className="panel-body">
-                <div className="sum-row"><span className="label">Subtotal</span><b>{money(cart.subtotal)}</b></div>
+                <div className="sum-row"><span className="label">Subtotal</span><b>{money(cart.subtotal, currencySymbol)}</b></div>
                 <div className="sum-row"><span className="label">Shipping</span><span className="text-mute">Calculated at checkout</span></div>
-                <div className="sum-total mb-3"><span className="t">Total</span><span className="v">{money(cart.subtotal)}</span></div>
+                <div className="sum-total mb-3"><span className="t">Total</span><span className="v">{money(cart.subtotal, currencySymbol)}</span></div>
                 <Link className="btn btn-accent w-100 mb-2" to="/checkout" style={{ padding: 13 }}>Proceed to Checkout</Link>
                 <button className="btn btn-outline-line w-100 border-0 mb-3" onClick={cart.clear}>Clear cart</button>
                 <div className="border-top pt-3">

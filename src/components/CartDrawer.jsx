@@ -1,12 +1,14 @@
 import { Link } from "react-router-dom";
-import { money } from "../data/site.js";
+import { money } from "../utils/format.js";
 import { useCart } from "../context/CartContext.jsx";
 import { useUI } from "../context/UIContext.jsx";
+import { useBusiness } from "../context/BusinessContext.jsx";
 import CartLine from "./CartLine.jsx";
 
 export default function CartDrawer() {
   const cart = useCart();
   const { cartOpen, setCartOpen } = useUI();
+  const { currencySymbol } = useBusiness();
 
   return (
     <aside className={"drawer" + (cartOpen ? " open" : "")}>
@@ -15,7 +17,7 @@ export default function CartDrawer() {
           <div className="eyebrow">Your shopping bag</div>
           <h5>Shopping Cart</h5>
         </div>
-        <button className="drawer-close" onClick={() => setCartOpen(false)}><i className="bi bi-x-lg"></i></button>
+        <button className="drawer-close" aria-label="Close" onClick={() => setCartOpen(false)}><i className="bi bi-x-lg"></i></button>
       </div>
 
       <div className="drawer-body">
@@ -37,7 +39,7 @@ export default function CartDrawer() {
             <div className="d-flex align-items-center justify-content-between mb-3">
               <span style={{ fontSize: "var(--fs-md)" }}>Subtotal</span>
               <span style={{ fontSize: "var(--fs-3xl)", fontWeight: 800, color: "var(--accent)" }}>
-                {money(cart.subtotal)}
+                {money(cart.subtotal, currencySymbol)}
               </span>
             </div>
             <div className="row g-2">

@@ -1,15 +1,31 @@
-import { Link, NavLink, useLocation } from "react-router-dom";
-
-const MENU = [
-  ["Dashboard", "/account"],
-  ["Orders", "/account/orders"],
-  ["Address", "/account/address"],
-  ["Profile", "/account/profile"],
-  ["Logout", "/login"]
-];
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext.jsx";
+import { useBusiness } from "../context/BusinessContext.jsx";
+import { initials } from "../utils/format.js";
 
 export default function AccountShell({ children }) {
   const { pathname } = useLocation();
+  const { customer, logout } = useAuth();
+  const { features } = useBusiness();
+  const navigate = useNavigate();
+
+  const name = customer ? [customer.first_name, customer.last_name].filter(Boolean).join(" ") || customer.name || "Account" : "Account";
+  const phone = customer?.phone || customer?.email || "";
+
+  const menu = [
+    ["Dashboard", "/account"],
+    ["Orders", "/account/orders"],
+    ...(features.user_wishlist ? [["Wishlist", "/wishlist"]] : []),
+    ["Address", "/account/address"],
+    ["Profile", "/account/profile"],
+  ];
+
+  const doLogout = async (e) => {
+    e.preventDefault();
+    await logout();
+    navigate("/login");
+  };
+
   return (
     <section className="section">
       <div className="container-x">
@@ -24,15 +40,18 @@ export default function AccountShell({ children }) {
           <div className="col-lg-3">
             <div className="acc-side">
               <div className="acc-user">
-                <span className="avatar">T</span>
-                <div><div className="nm">Tumi Ami</div><div className="ph">3216457980</div></div>
+                <span className="avatar">{initials(name)}</span>
+                <div><div className="nm">{name}</div><div className="ph">{phone}</div></div>
               </div>
               <ul className="acc-menu">
-                {MENU.map(([label, to]) => (
+                {menu.map(([label, to]) => (
                   <li key={to} className={pathname === to ? "active" : ""}>
                     <NavLink to={to} end>{label}</NavLink>
                   </li>
                 ))}
+                <li>
+                  <a href="/login" onClick={doLogout}>Logout</a>
+                </li>
               </ul>
             </div>
           </div>
