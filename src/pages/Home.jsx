@@ -11,7 +11,7 @@ import SliderShell from "../components/SliderShell.jsx";
 
 export default function Home() {
   const { categories, sliders } = useBusiness();
-  const summary = useAsync((signal) => home.summary({ per_page: 8 }, { signal }), []);
+  const summary = useAsync((signal) => home.summary({ per_page: 24 }, { signal }), []);
   const featuredRows = paginated(summary.data?.featured).rows;
   const latestRows = paginated(summary.data?.latest).rows;
   const topCategories = categories.filter((c) => !c.parent_id);
@@ -91,7 +91,7 @@ export default function Home() {
                   onBeforeInit={(s) => { s.params.navigation.prevEl = prev.current; s.params.navigation.nextEl = next.current; }}
                   navigation
                 >
-                  {featuredRows.slice(0, 6).map((p) => (
+                  {featuredRows.slice(0, 12).map((p) => (
                     <SwiperSlide className="h-auto" key={p.id}><ProductCard product={p} /></SwiperSlide>
                   ))}
                 </Swiper>
