@@ -52,8 +52,8 @@ export default function Footer() {
           <div className="col-lg-3 col-md-6">
             <h6>Contact Info</h6>
             <ul>
-              {info?.phone && <li><span className="contact-row"><i className="bi bi-telephone"></i> {info.phone}</span></li>}
-              {info?.email && <li><span className="contact-row"><i className="bi bi-envelope"></i> {info.email}</span></li>}
+              {info?.phone && <li><span className="contact-row"><i className="bi bi-telephone"></i> <a href={`tel:${info.phone}`}>{info.phone}</a></span></li>}
+              {info?.email && <li><span className="contact-row"><i className="bi bi-envelope"></i> <a href={`mailto:${info.email}`}>{info.email}</a></span></li>}
               {address && <li><span className="contact-row"><i className="bi bi-geo-alt"></i> {address}</span></li>}
             </ul>
           </div>
