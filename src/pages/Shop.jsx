@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { useParams, useSearchParams } from "react-router-dom";
+import { Link, useParams, useSearchParams } from "react-router-dom";
 import { useBusiness } from "../context/BusinessContext.jsx";
 import { useAsync } from "../hooks/useAsync.js";
 import { catalog } from "../api/endpoints.js";
@@ -28,7 +28,13 @@ export default function Shop() {
   const activeCategory = categories.find((c) => c.slug === categorySlug);
   const topCategories = categories.filter((c) => !c.parent_id);
 
-  useEffect(() => { setPage(1); setPriceFilter({}); setMinPrice(""); setMaxPrice(""); setSort("latest"); }, [categorySlug, keyword]);
+  useEffect(() => {
+    setPage(1); setPriceFilter({}); setMinPrice(""); setMaxPrice(""); setSort("latest");
+    if (!categorySlug) { setOpen(null); return; }
+    const current = categories.find((c) => c.slug === categorySlug);
+    const topSlug = current?.parent_id ? categories.find((c) => c.id === current.parent_id)?.slug : current?.slug;
+    setOpen(topSlug || null);
+  }, [categorySlug, keyword, categories]);
 
   const query = useMemo(() => ({
     keyword: keyword || undefined,
@@ -94,30 +100,27 @@ export default function Shop() {
                 <h5 style={{ fontSize: "var(--fs-xl)", marginBottom: 12 }}>Categories</h5>
                 <ul className="cat-list">
                   <li className={!categorySlug ? "active" : ""}>
-                    <a className="row-link" href="/shop">
+                    <Link className="row-link" to="/shop">
                       <span>All Products</span>
-                    </a>
+                    </Link>
                   </li>
                   {topCategories.map((c) => {
                     const sub = categories.filter((x) => x.parent_id === c.id);
                     return (
                       <li key={c.slug} className={(open === c.slug ? "open " : "") + (categorySlug === c.slug ? "active" : "")}>
-                        <span
-                          className="row-link"
-                          onClick={() => { window.location.href = `/shop/${c.slug}`; }}
-                        >
+                        <Link className="row-link" to={`/shop/${c.slug}`}>
                           <span>{c.name}</span>
                           <span className="badge-n">{c.products_count ?? ""}</span>
                           {sub.length ? (
                             <i
                               className="bi bi-chevron-down chev"
-                              onClick={(e) => { e.stopPropagation(); setOpen(open === c.slug ? null : c.slug); }}
+                              onClick={(e) => { e.preventDefault(); e.stopPropagation(); setOpen(open === c.slug ? null : c.slug); }}
                             ></i>
                           ) : null}
-                        </span>
+                        </Link>
                         {sub.length ? (
                           <ul className="sub">
-                            {sub.map((s) => (<li key={s.slug}><a href={`/shop/${s.slug}`}>{s.name}</a></li>))}
+                            {sub.map((s) => (<li key={s.slug}><Link to={`/shop/${s.slug}`}>{s.name}</Link></li>))}
                           </ul>
                         ) : null}
                       </li>
