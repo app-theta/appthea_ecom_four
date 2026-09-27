@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.jsx";
 import { parseApiError } from "../api/errors.js";
+import SocialLogin from "../components/SocialLogin.jsx";
 
 export default function Register() {
   const { register } = useAuth();
@@ -83,6 +84,7 @@ export default function Register() {
               {busy ? "Creating account…" : "Create Account"}
             </button>
           </form>
+          <SocialLogin onDone={() => navigate("/account", { replace: true })} />
           <p className="text-center mb-0 mt-3" style={{ fontSize: "var(--fs-sm)" }}>
             Already registered? <Link to="/login" style={{ fontWeight: 700 }}>Login here</Link>
           </p>

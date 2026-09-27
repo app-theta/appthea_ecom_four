@@ -4,7 +4,8 @@ import AccountShell from "../components/AccountShell.jsx";
 import { useAsync } from "../hooks/useAsync.js";
 import { account } from "../api/endpoints.js";
 import { paginated } from "../utils/product.js";
-import { dateShort, money } from "../utils/format.js";
+import { dateShort, money, statusTone } from "../utils/format.js";
+import { parseApiError } from "../api/errors.js";
 import { useBusiness } from "../context/BusinessContext.jsx";
 
 const STATUSES = ["All orders", "Pending", "Processing", "Confirmed", "Delivery", "Cancelled"];
@@ -12,6 +13,7 @@ const STATUSES = ["All orders", "Pending", "Processing", "Confirmed", "Delivery"
 export default function AccountOrders() {
   const { currencySymbol } = useBusiness();
   const [status, setStatus] = useState("All orders");
+  const [message, setMessage] = useState("");
 
   const query = useMemo(() => ({
     per_page: 20,
@@ -25,11 +27,14 @@ export default function AccountOrders() {
   const { rows, total } = paginated(data);
 
   const cancelOrder = async (id) => {
-    if (!window.confirm("Cancel this order?")) return;
+    if (!window.confirm("Cancel this order? This cannot be undone.")) return;
     try {
-      await account.deleteOrder(id);
+      await account.cancelOrder(id);
+      setMessage("Your order was cancelled.");
       reload();
-    } catch { /* leave the list unchanged */ }
+    } catch (e) {
+      setMessage(parseApiError(e).message);
+    }
   };
 
   return (
@@ -47,7 +52,8 @@ export default function AccountOrders() {
             </select>
           </div>
 
-          {loading ? (
+          {message && <p className="mb-3" style={{ fontSize: "var(--fs-sm)" }}>{message}</p>}
+          {loading && !data ? (
             <p className="text-mute mb-0">Loading orders…</p>
           ) : error ? (
             <p style={{ color: "var(--danger)" }}>{error.message}</p>
@@ -62,14 +68,15 @@ export default function AccountOrders() {
                 <div className="order-row" key={o.id}>
                   <div className="d-flex align-items-center justify-content-between gap-3 flex-wrap pb-3 border-bottom">
                     <div><b>{o.invoice_no || o.unique_code}</b> <span className="text-mute" style={{ fontSize: "var(--fs-sm)" }}>{dateShort(o.date)}</span></div>
-                    <span className={"status-pill" + (o.sale_status === "Pending" ? " pending" : "")}>{o.sale_status}</span>
+                    <span className={`status-pill ${statusTone(o.sale_status)}`}>{o.sale_status}</span>
                   </div>
                   <div className="d-flex align-items-center justify-content-between gap-3 flex-wrap pt-3">
                     <span style={{ fontSize: "var(--fs-sm)" }}>Total <b>{money(o.total_amount, currencySymbol)}</b></span>
                     <span style={{ fontSize: "var(--fs-sm)" }}>Payment <b>{o.sale_paid_status}</b></span>
                     <div className="d-flex align-items-center gap-3">
+                      <Link to={`/account/orders/${o.id}`} style={{ fontWeight: 700 }}>Details</Link>
                       <Link to={`/track-order?order=${encodeURIComponent(o.unique_code)}`} style={{ fontWeight: 700 }}>Track Order</Link>
-                      {["Pending", "Processing"].includes(o.sale_status) && (
+                      {o.can_cancel && (
                         <button type="button" className="btn btn-outline-line border-0" style={{ color: "var(--danger)" }} onClick={() => cancelOrder(o.id)}>Cancel</button>
                       )}
                     </div>

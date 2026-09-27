@@ -14,9 +14,9 @@ export default function MobileNav() {
       <a href="#" onClick={(e) => { e.preventDefault(); setMenuOpen(true); }}>
         <i className="bi bi-list"></i><span>Category</span>
       </a>
-      <a href="#" onClick={(e) => e.preventDefault()}>
+      <Link to="/contact" className={pathname === "/contact" ? "active" : ""}>
         <i className="bi bi-chat-square"></i><span>Message</span>
-      </a>
+      </Link>
       <Link to="/" className={pathname === "/" ? "active" : ""}>
         <i className="bi bi-house-door-fill"></i><span>Home</span>
       </Link>

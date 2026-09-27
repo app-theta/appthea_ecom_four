@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.jsx";
 import { parseApiError } from "../api/errors.js";
+import SocialLogin from "../components/SocialLogin.jsx";
 
 export default function Login() {
   const { login } = useAuth();
@@ -74,12 +75,13 @@ export default function Login() {
                   onChange={(e) => setForm({ ...form, remember_me: e.target.checked })}
                 /> Remember me for 30 days
               </label>
-              <a href="#" style={{ fontSize: "var(--fs-sm)", fontWeight: 700 }}>Forgot password?</a>
+              <Link to="/forgot-password" style={{ fontSize: "var(--fs-sm)", fontWeight: 700 }}>Forgot password?</Link>
             </div>
             <button className="btn btn-accent w-100" style={{ padding: 13, fontSize: "var(--fs-lg)" }} disabled={busy}>
               {busy ? "Signing in…" : "Login to Account"}
             </button>
           </form>
+          <SocialLogin onDone={() => navigate(location.state?.from || "/account", { replace: true })} />
           <div className="divider-text"><span>New customer?</span></div>
           <p className="text-center mb-0" style={{ fontSize: "var(--fs-sm)" }}>
             Do not have an account? <Link to="/register" style={{ fontWeight: 700 }}>Create account</Link>

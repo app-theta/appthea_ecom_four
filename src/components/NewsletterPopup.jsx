@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useBusiness } from "../context/BusinessContext.jsx";
+import { useSubscribe } from "../hooks/useSubscribe.js";
 
 const SEEN_KEY = "apptheta_newsletter_seen";
 
@@ -10,7 +11,7 @@ export default function NewsletterPopup() {
   const { features, info } = useBusiness();
   const [open, setOpen] = useState(false);
   const [email, setEmail] = useState("");
-  const [done, setDone] = useState(false);
+  const newsletter = useSubscribe();
 
   useEffect(() => {
     if (!features.newsletter_popup) return;
@@ -26,9 +27,11 @@ export default function NewsletterPopup() {
     try { localStorage.setItem(SEEN_KEY, "1"); } catch { /* ignore */ }
   };
 
-  const subscribe = (e) => {
+  const subscribe = async (e) => {
     e.preventDefault();
-    setDone(true);
+    if (await newsletter.subscribe(email)) {
+      try { localStorage.setItem(SEEN_KEY, "1"); } catch { /* ignore */ }
+    }
   };
 
   if (!open) return null;
@@ -49,7 +52,7 @@ export default function NewsletterPopup() {
           <div className="ico"><i className="bi bi-envelope-heart"></i></div>
         </div>
         <h1 style={{ fontSize: "var(--fs-6xl)" }}>Join our newsletter</h1>
-        {done ? (
+        {newsletter.done ? (
           <p className="sub mb-0">Thanks for subscribing!</p>
         ) : (
           <>
@@ -64,7 +67,8 @@ export default function NewsletterPopup() {
                 placeholder="you@example.com"
                 aria-label="Email address"
               />
-              <button type="submit" className="btn btn-accent w-100" style={{ padding: 12 }}>Subscribe</button>
+              {newsletter.error && <p className="mb-2" style={{ color: "var(--danger)", fontSize: "var(--fs-sm)" }}>{newsletter.error}</p>}
+              <button type="submit" className="btn btn-accent w-100" style={{ padding: 12 }} disabled={newsletter.busy}>Subscribe</button>
             </form>
           </>
         )}

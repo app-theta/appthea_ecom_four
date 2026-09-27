@@ -1,8 +1,12 @@
 import { Link } from "react-router-dom";
+import { useState } from "react";
 import { useBusiness } from "../context/BusinessContext.jsx";
+import { useSubscribe } from "../hooks/useSubscribe.js";
 
 export default function Footer() {
-  const { info } = useBusiness();
+  const { info, features } = useBusiness();
+  const [email, setEmail] = useState("");
+  const newsletter = useSubscribe();
   const name = info?.name || "AppTheta Ecom";
   const address = [info?.address, info?.area, info?.city].filter(Boolean).join(", ");
 
@@ -24,6 +28,17 @@ export default function Footer() {
             <p style={{ maxWidth: 320 }}>
               Your trusted online shopping platform for quality products, secure ordering and fast delivery across Bangladesh.
             </p>
+            {features.is_subscribe_newsletter && (
+              newsletter.done ? (
+                <p className="mb-0">Thanks for subscribing!</p>
+              ) : (
+                <form className="d-flex gap-2 footer-subscribe" style={{ maxWidth: 360 }} onSubmit={(e) => { e.preventDefault(); newsletter.subscribe(email); }}>
+                  <input type="email" className="form-control" placeholder="Your email for news &amp; offers" aria-label="Email address" required value={email} onChange={(e) => setEmail(e.target.value)} />
+                  <button type="submit" className="btn btn-accent" disabled={newsletter.busy}>Subscribe</button>
+                </form>
+              )
+            )}
+            {newsletter.error && <p className="mb-0 mt-1" style={{ fontSize: "var(--fs-xs)" }}>{newsletter.error}</p>}
           </div>
           <div className="col-lg-2 col-md-6">
             <h6>Customer Service</h6>
@@ -34,6 +49,9 @@ export default function Footer() {
               <li><Link to="/refund-policy">Refund Policy</Link></li>
               <li><Link to="/return-policy">Return Policy</Link></li>
               <li><Link to="/track-order">Track Order</Link></li>
+              <li><Link to="/blog">Blog</Link></li>
+              <li><Link to="/faq">FAQ</Link></li>
+              <li><Link to="/contact">Contact Us</Link></li>
               <li><Link to="/account">My Account</Link></li>
             </ul>
           </div>

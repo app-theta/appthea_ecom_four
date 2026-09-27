@@ -15,6 +15,7 @@ export default function AccountShell({ children }) {
   const menu = [
     ["Dashboard", "/account"],
     ["Orders", "/account/orders"],
+    ["Returns", "/account/returns"],
     ...(features.user_wishlist ? [["Wishlist", "/wishlist"]] : []),
     ["Address", "/account/address"],
     ["Profile", "/account/profile"],
