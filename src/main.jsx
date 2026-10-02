@@ -15,6 +15,7 @@ import { AuthProvider } from "./context/AuthContext.jsx";
 import { WishlistProvider } from "./context/WishlistContext.jsx";
 import { CartProvider } from "./context/CartContext.jsx";
 import { UIProvider } from "./context/UIContext.jsx";
+import { ChatProvider } from "./context/ChatContext.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
@@ -24,7 +25,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           <WishlistProvider>
             <CartProvider>
               <UIProvider>
-                <App />
+                <ChatProvider>
+                  <App />
+                </ChatProvider>
               </UIProvider>
             </CartProvider>
           </WishlistProvider>

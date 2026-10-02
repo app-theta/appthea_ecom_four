@@ -34,6 +34,8 @@ export default function Login() {
           <Link className="back-link" to="/">← Back to store</Link>
           <h1>Welcome Back</h1>
           <p className="sub">Login to view orders, addresses and account information.</p>
+          {/* e.g. "Your account was deleted." after closing an account */}
+          {location.state?.notice && <p className="mb-3" style={{ color: "var(--success)", fontSize: "var(--fs-sm)" }}>{location.state.notice}</p>}
           <form onSubmit={submit} noValidate>
             <div className="mb-3">
               <label className="form-label">Email Address</label>

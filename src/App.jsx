@@ -11,6 +11,8 @@ import Account from "./pages/Account.jsx";
 import AccountOrders from "./pages/AccountOrders.jsx";
 import AccountOrderDetail from "./pages/AccountOrderDetail.jsx";
 import AccountReturns from "./pages/AccountReturns.jsx";
+import AccountChat from "./pages/AccountChat.jsx";
+import AccountDelete from "./pages/AccountDelete.jsx";
 import ForgotPassword from "./pages/ForgotPassword.jsx";
 import Blog from "./pages/Blog.jsx";
 import BlogPost from "./pages/BlogPost.jsx";
@@ -49,6 +51,8 @@ export default function App() {
         <Route path="/account/orders" element={<ProtectedRoute><AccountOrders /></ProtectedRoute>} />
         <Route path="/account/orders/:id" element={<ProtectedRoute><AccountOrderDetail /></ProtectedRoute>} />
         <Route path="/account/returns" element={<ProtectedRoute><AccountReturns /></ProtectedRoute>} />
+        <Route path="/account/delete" element={<ProtectedRoute><AccountDelete /></ProtectedRoute>} />
+        <Route path="/account/chat" element={<ProtectedRoute><AccountChat /></ProtectedRoute>} />
         <Route path="/account/address" element={<ProtectedRoute><AccountAddress /></ProtectedRoute>} />
         <Route path="/account/profile" element={<ProtectedRoute><AccountProfile /></ProtectedRoute>} />
         <Route path="/order/success" element={<OrderSuccess />} />

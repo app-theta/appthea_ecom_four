@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.jsx";
 import { parseApiError } from "../api/errors.js";
 import SocialLogin from "../components/SocialLogin.jsx";
@@ -7,6 +7,9 @@ import SocialLogin from "../components/SocialLogin.jsx";
 export default function Register() {
   const { register } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  // came here from somewhere that needs an account (e.g. the chat) - go back there after
+  const back = location.state?.from || "/account";
   const [show, setShow] = useState({ a: false, b: false });
   const [form, setForm] = useState({
     first_name: "", last_name: "", phone: "", email: "", password: "", password_confirmation: "",
@@ -22,7 +25,7 @@ export default function Register() {
     setBusy(true); setErrors({}); setError("");
     try {
       await register(form);
-      navigate("/account", { replace: true });
+      navigate(back, { replace: true });
     } catch (err) {
       const parsed = parseApiError(err);
       setErrors(parsed.fields);
@@ -84,7 +87,7 @@ export default function Register() {
               {busy ? "Creating account…" : "Create Account"}
             </button>
           </form>
-          <SocialLogin onDone={() => navigate("/account", { replace: true })} />
+          <SocialLogin onDone={() => navigate(back, { replace: true })} />
           <p className="text-center mb-0 mt-3" style={{ fontSize: "var(--fs-sm)" }}>
             Already registered? <Link to="/login" style={{ fontWeight: 700 }}>Login here</Link>
           </p>

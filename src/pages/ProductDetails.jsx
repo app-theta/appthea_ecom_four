@@ -9,6 +9,7 @@ import { useUI } from "../context/UIContext.jsx";
 import { useAuth } from "../context/AuthContext.jsx";
 import { useBusiness } from "../context/BusinessContext.jsx";
 import { useWishlist } from "../context/WishlistContext.jsx";
+import { useChat } from "../context/ChatContext.jsx";
 import { useAsync } from "../hooks/useAsync.js";
 import { catalog, reviews as reviewsApi } from "../api/endpoints.js";
 import ProductCard from "../components/ProductCard.jsx";
@@ -29,6 +30,7 @@ export default function ProductDetails() {
   const { isAuthed } = useAuth();
   const { currencySymbol, features, shipping } = useBusiness();
   const wishlist = useWishlist();
+  const chat = useChat();
 
   const { data: p, loading, error, reload } = useAsync((signal) => catalog.product(slug, { signal }), [slug]);
 
@@ -172,6 +174,13 @@ export default function ProductDetails() {
                   {features.user_wishlist && (
                     <button type="button" className="btn btn-outline-line w-100 mt-2" style={{ padding: 13 }} onClick={onWish}>
                       <i className={"bi " + (wished ? "bi-heart-fill" : "bi-heart")}></i> {wished ? "In Wishlist" : "Add to Wishlist"}
+                    </button>
+                  )}
+
+                  {chat.enabled && (
+                    <button type="button" className="btn btn-outline-line w-100 mt-2" style={{ padding: 13 }}
+                            onClick={() => chat.openChat({ product: { id: p.id, title: p.name, image: images[0] } })}>
+                      <i className="bi bi-chat-dots"></i> Ask about this product
                     </button>
                   )}
 

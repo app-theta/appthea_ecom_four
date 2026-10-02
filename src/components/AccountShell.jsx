@@ -1,12 +1,14 @@
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.jsx";
 import { useBusiness } from "../context/BusinessContext.jsx";
+import { useChat } from "../context/ChatContext.jsx";
 import { initials } from "../utils/format.js";
 
 export default function AccountShell({ children }) {
   const { pathname } = useLocation();
   const { customer, logout } = useAuth();
   const { features } = useBusiness();
+  const chat = useChat();
   const navigate = useNavigate();
 
   const name = customer ? [customer.first_name, customer.last_name].filter(Boolean).join(" ") || customer.name || "Account" : "Account";
@@ -17,8 +19,10 @@ export default function AccountShell({ children }) {
     ["Orders", "/account/orders"],
     ["Returns", "/account/returns"],
     ...(features.user_wishlist ? [["Wishlist", "/wishlist"]] : []),
+    ...(features.customer_live_chat ? [["Chat with us", "/account/chat", chat.unread]] : []),
     ["Address", "/account/address"],
     ["Profile", "/account/profile"],
+    ["Delete account", "/account/delete"],
   ];
 
   const doLogout = async (e) => {
@@ -45,9 +49,9 @@ export default function AccountShell({ children }) {
                 <div><div className="nm">{name}</div><div className="ph">{phone}</div></div>
               </div>
               <ul className="acc-menu">
-                {menu.map(([label, to]) => (
+                {menu.map(([label, to, badge]) => (
                   <li key={to} className={pathname === to ? "active" : ""}>
-                    <NavLink to={to} end>{label}</NavLink>
+                    <NavLink to={to} end style={to === "/account/delete" ? { color: "var(--danger)" } : undefined}>{label}{badge > 0 && <span className="badge rounded-pill acc-badge">{badge > 99 ? "99+" : badge}</span>}</NavLink>
                   </li>
                 ))}
                 <li>

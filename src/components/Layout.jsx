@@ -7,6 +7,7 @@ import CartDrawer from "./CartDrawer.jsx";
 import MenuDrawer from "./MenuDrawer.jsx";
 import QuickView from "./QuickView.jsx";
 import NewsletterPopup from "./NewsletterPopup.jsx";
+import ChatWidget from "./chat/ChatWidget.jsx";
 import { useUI } from "../context/UIContext.jsx";
 import { useBusiness } from "../context/BusinessContext.jsx";
 
@@ -36,6 +37,7 @@ export default function Layout() {
       <main><Outlet /></main>
       <Footer />
       <MobileNav />
+      <ChatWidget />
       <div className={"drawer-backdrop" + (cartOpen || menuOpen ? " open" : "")} onClick={closeAll}></div>
       <CartDrawer />
       <MenuDrawer />

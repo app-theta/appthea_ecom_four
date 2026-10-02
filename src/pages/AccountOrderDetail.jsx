@@ -8,10 +8,12 @@ import { parseApiError } from "../api/errors.js";
 import { dateShort, money, statusTone } from "../utils/format.js";
 import { imageUrl, num } from "../utils/product.js";
 import { useBusiness } from "../context/BusinessContext.jsx";
+import { useChat } from "../context/ChatContext.jsx";
 
 export default function AccountOrderDetail() {
   const { id } = useParams();
   const { currencySymbol } = useBusiness();
+  const chat = useChat();
   const { data, loading, error, reload } = useAsync((signal) => account.orderDetails(id, { signal }), [id]);
   const [message, setMessage] = useState("");
 
@@ -62,6 +64,11 @@ export default function AccountOrderDetail() {
                   <span className={`status-pill ${statusTone(o.sale_status)}`}>{o.sale_status}</span>
                   <span className={`status-pill ${o.sale_paid_status === "Paid" ? "success" : "pending"}`}>{o.sale_paid_status}</span>
                   <button type="button" className="btn btn-outline-line" onClick={download}><i className="bi bi-download me-1"></i> Invoice</button>
+                  {chat.enabled && (
+                    <button type="button" className="btn btn-outline-line" onClick={() => chat.openChat({ order: { id: o.id, invoice_no: o.invoice_no } })}>
+                      <i className="bi bi-chat-dots me-1"></i> Help with this order
+                    </button>
+                  )}
                   {o.can_cancel && (
                     <button type="button" className="btn btn-outline-line" style={{ color: "var(--danger)" }} onClick={cancel}>Cancel order</button>
                   )}
