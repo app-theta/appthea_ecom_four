@@ -6,7 +6,7 @@ import { useAuth } from "../context/AuthContext.jsx";
 import { useBusiness } from "../context/BusinessContext.jsx";
 import { checkout as checkoutApi } from "../api/endpoints.js";
 import { parseApiError, isPriceMismatch, needsOtp } from "../api/errors.js";
-import { useCheckoutDraftAutosave } from "../hooks/useCheckoutDraftAutosave.js";
+import { useCheckoutDraftAutosave, storedGuestId } from "../hooks/useCheckoutDraftAutosave.js";
 import CartLine from "../components/CartLine.jsx";
 import OtpModal from "../components/OtpModal.jsx";
 
@@ -65,7 +65,7 @@ export default function Checkout() {
   );
 
   const getCartPayload = useCallback(() => ({ cart: cart.apiCart(), grandTotal }), [cart, grandTotal]);
-  const { saveDraft } = useCheckoutDraftAutosave({ isLoggedIn: isAuthed, enabled: !!features.draft_orders, getCartPayload });
+  const { saveDraft, cancelPendingDraft } = useCheckoutDraftAutosave({ isLoggedIn: isAuthed, enabled: !!features.draft_orders, getCartPayload });
 
   const set = (k) => (e) => {
     const value = e.target.value;
@@ -124,8 +124,13 @@ export default function Checkout() {
         return;
       }
 
+      // placing it now: a draft save still waiting must not run after the order
+      cancelPendingDraft();
+
       const payload = {
         cart: cart.apiCart(),
+        // lets the server drop this browser's checkout draft once the order exists
+        guest_id: storedGuestId(),
         coupon_code: applied ? coupon.trim() : "",
         coupon_discount_amount: discount,
         full_name: form.name,
