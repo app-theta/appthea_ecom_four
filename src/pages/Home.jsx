@@ -3,17 +3,24 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import { useBusiness } from "../context/BusinessContext.jsx";
 import { useAsync } from "../hooks/useAsync.js";
-import { home } from "../api/endpoints.js";
+import { home, deals } from "../api/endpoints.js";
 import { paginated, imageUrl } from "../utils/product.js";
 import ProductCard from "../components/ProductCard.jsx";
 import SectionHead from "../components/SectionHead.jsx";
 import SliderShell from "../components/SliderShell.jsx";
+import CampaignHero from "../components/CampaignHero.jsx";
+import Countdown from "../components/Countdown.jsx";
 
 export default function Home() {
   const { categories, sliders } = useBusiness();
   const summary = useAsync((signal) => home.summary({ per_page: 24 }, { signal }), []);
+  // both come priced at the deal / campaign price; each reloads when its countdown ends
+  const campaigns = useAsync((signal) => deals.campaigns({ products: 8 }, { signal }), []);
+  const hotDeals = useAsync((signal) => deals.hotDeals({ signal }), []);
   const featuredRows = paginated(summary.data?.featured).rows;
   const latestRows = paginated(summary.data?.latest).rows;
+  const campaignList = Array.isArray(campaigns.data?.campaigns) ? campaigns.data.campaigns : [];
+  const hotRows = Array.isArray(hotDeals.data?.products) ? hotDeals.data.products : [];
   const topCategories = categories.filter((c) => !c.parent_id);
 
   return (
@@ -77,10 +84,53 @@ export default function Home() {
         </section>
       )}
 
+      {campaignList.map((c) => (
+        <section className="section pt-0" key={c.id}>
+          <div className="container-x">
+            <CampaignHero campaign={c} onEnd={campaigns.reload} />
+            {c.products?.length > 0 && (
+              <div className="grid-products cols-4 mt-4">
+                {c.products.map((p) => <ProductCard key={p.id} product={p} />)}
+              </div>
+            )}
+          </div>
+        </section>
+      ))}
+
+      {hotRows.length > 0 && (
+        <section className="section pt-0 hot-deals">
+          <div className="container-x">
+            <SectionHead title="হট ডিল" sub="বিশেষ দাম - টাইমার শেষ হওয়া পর্যন্ত" />
+            {hotDeals.data?.ends_at && (
+              <div className="hot-deals__timer">
+                <span className="hot-deals__label">শেষ হবে</span>
+                <Countdown endsAt={hotDeals.data.ends_at} onEnd={hotDeals.reload} />
+              </div>
+            )}
+            <SliderShell>
+              {({ prev, next }) => (
+                <Swiper
+                  modules={[Navigation]}
+                  spaceBetween={14}
+                  slidesPerView={2}
+                  breakpoints={{ 768: { slidesPerView: 3 }, 992: { slidesPerView: 4 }, 1200: { slidesPerView: 5 } }}
+                  onBeforeInit={(s) => { s.params.navigation.prevEl = prev.current; s.params.navigation.nextEl = next.current; }}
+                  navigation
+                >
+                  {hotRows.map((p) => (
+                    <SwiperSlide className="h-auto" key={p.id}><ProductCard product={p} /></SwiperSlide>
+                  ))}
+                </Swiper>
+              )}
+            </SliderShell>
+          </div>
+        </section>
+      )}
+
       {(summary.loading || featuredRows.length > 0) && (
         <section className="section pt-0">
           <div className="container-x">
-            <SectionHead title="Hot Deal" sub="Limited-time picks and popular products" />
+            <SectionHead title="ফিচার্ড পণ্য" sub="আমাদের বাছাই করা জনপ্রিয় পণ্য" />
             <SliderShell>
               {({ prev, next }) => (
                 <Swiper

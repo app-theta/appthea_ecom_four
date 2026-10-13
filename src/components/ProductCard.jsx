@@ -37,6 +37,11 @@ export default function ProductCard({ product: p }) {
     <div className="p-card">
       <div className="p-media">
         {dis ? <span className="p-badge">-{dis}%</span> : null}
+        {p.campaign && inStock ? (
+          <Link className="p-campaign" to={`/campaign/${p.campaign.slug}`} title={p.campaign.title}>
+            <i className="bi bi-lightning-charge-fill"></i> {p.campaign.title}
+          </Link>
+        ) : null}
         {features.user_wishlist && (
           <button className={"p-wish" + (wished ? " is-on" : "")} title="Wishlist" aria-label="Wishlist" aria-pressed={wished} onClick={onWish}>
             <i className={"bi " + (wished ? "bi-heart-fill" : "bi-heart")}></i>

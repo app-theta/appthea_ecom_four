@@ -13,6 +13,7 @@ import { useChat } from "../context/ChatContext.jsx";
 import { useAsync } from "../hooks/useAsync.js";
 import { catalog, reviews as reviewsApi } from "../api/endpoints.js";
 import ProductCard from "../components/ProductCard.jsx";
+import Countdown from "../components/Countdown.jsx";
 import Qty from "../components/Qty.jsx";
 import SliderShell from "../components/SliderShell.jsx";
 
@@ -152,6 +153,12 @@ export default function ProductDetails() {
                 )}
 
                 <div className="mt-3">
+                  {p.campaign ? (
+                    <Link className="pd-campaign" to={`/campaign/${p.campaign.slug}`}>
+                      <span className="pd-campaign__name"><i className="bi bi-lightning-charge-fill"></i> {p.campaign.title}</span>
+                      <span>শেষ হবে <Countdown endsAt={p.campaign.ends_at} variant="inline" onEnd={reload} /></span>
+                    </Link>
+                  ) : null}
                   <div className="pd-price">{money(price.now, currencySymbol)}</div>
                   {price.was > 0 ? (
                     <p className="pd-short">

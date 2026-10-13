@@ -2921,3 +2921,218 @@ img {
   }
   .chat-widget:has(.chat-popup) .chat-fab { display: none; }
 }
+
+/* ============ hot deals & campaigns ============ */
+.countdown {
+  display: inline-flex;
+  gap: 8px;
+}
+
+.countdown__unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 56px;
+  padding: 8px 4px;
+  border-radius: var(--radius-sm);
+  background: var(--ink);
+  color: #fff;
+  line-height: 1.1;
+}
+
+.countdown__value {
+  font-size: var(--fs-2xl);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.countdown__label {
+  margin-top: 3px;
+  font-size: var(--fs-3xs);
+  opacity: 0.8;
+}
+
+.countdown--light .countdown__unit {
+  background: rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(4px);
+}
+
+.countdown-inline {
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.hot-deals__timer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin: -10px 0 24px;
+}
+
+.hot-deals__label {
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  color: var(--ink-soft);
+}
+
+.campaign-hero {
+  position: relative;
+  overflow: hidden;
+  min-height: 250px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: var(--radius);
+  color: #fff;
+  background: linear-gradient(120deg, var(--ink), var(--accent-dark) 70%, var(--accent));
+}
+
+.campaign-hero__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.campaign-hero.has-banner::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(19, 26, 43, 0.85), rgba(19, 26, 43, 0.4) 50%, rgba(19, 26, 43, 0.72));
+}
+
+.campaign-hero__body {
+  position: relative;
+  z-index: 1;
+  max-width: 640px;
+  padding: 36px 34px;
+}
+
+.campaign-hero__eyebrow {
+  margin: 0 0 6px;
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  color: #ffd29b;
+}
+
+.campaign-hero__title {
+  margin: 0;
+  font-size: var(--fs-8xl);
+  font-weight: 800;
+  line-height: 1.15;
+  color: #fff;
+}
+
+.campaign-hero__about {
+  margin: 10px 0 0;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: var(--fs-md);
+}
+
+/* right side of the banner; below the text on a phone */
+.campaign-hero__ends {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  padding: 36px 34px;
+}
+
+.campaign-hero__ends-label {
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.campaign-hero__cta {
+  margin-top: 22px;
+  background: #fff;
+  border: 1px solid #fff;
+  color: var(--ink);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  padding: 10px 20px;
+}
+
+.campaign-hero__cta:hover {
+  background: var(--accent-tint);
+  color: var(--ink);
+}
+
+.p-campaign {
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  z-index: 3;
+  max-width: calc(100% - 20px);
+  padding: 3px 9px;
+  border-radius: var(--radius-pill);
+  background: var(--danger);
+  color: #fff;
+  font-size: var(--fs-3xs);
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.p-campaign:hover {
+  background: var(--ink);
+  color: #fff;
+}
+
+.pd-campaign {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 14px;
+  padding: 11px 16px;
+  border-radius: var(--radius-sm);
+  background: var(--danger);
+  color: #fff;
+  font-size: var(--fs-sm);
+}
+
+.pd-campaign:hover {
+  background: var(--ink);
+  color: #fff;
+}
+
+.pd-campaign__name {
+  font-weight: 700;
+}
+
+@media (max-width: 767.98px) {
+  .campaign-hero__body,
+  .campaign-hero__ends {
+    width: 100%;
+  }
+
+  .campaign-hero__body {
+    padding: 28px 20px 14px;
+  }
+
+  .campaign-hero__ends {
+    align-items: flex-start;
+    padding: 0 20px 28px;
+  }
+
+  .campaign-hero__title {
+    font-size: var(--fs-5xl);
+  }
+
+  .countdown__unit {
+    min-width: 46px;
+  }
+
+  .countdown__value {
+    font-size: var(--fs-lg);
+  }
+}
