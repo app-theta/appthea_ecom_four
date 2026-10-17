@@ -12,15 +12,16 @@ import CampaignHero from "../components/CampaignHero.jsx";
 import Countdown from "../components/Countdown.jsx";
 
 export default function Home() {
-  const { categories, sliders } = useBusiness();
+  const { categories, sliders, features } = useBusiness();
   const summary = useAsync((signal) => home.summary({ per_page: 24 }, { signal }), []);
-  // both come priced at the deal / campaign price; each reloads when its countdown ends
-  const campaigns = useAsync((signal) => deals.campaigns({ products: 8 }, { signal }), []);
-  const hotDeals = useAsync((signal) => deals.hotDeals({ signal }), []);
-  const featuredRows = paginated(summary.data?.featured).rows;
+  // both come priced at the deal / campaign price; each reloads when its countdown ends.
+  // A section the store switched off is neither fetched nor shown.
+  const campaigns = useAsync((signal) => deals.campaigns({ products: 8 }, { signal }), [], { skip: !features.enable_campaign });
+  const hotDeals = useAsync((signal) => deals.hotDeals({ signal }), [], { skip: !features.enable_hotdeal_product });
+  const featuredRows = features.enable_featured_product ? paginated(summary.data?.featured).rows : [];
   const latestRows = paginated(summary.data?.latest).rows;
-  const campaignList = Array.isArray(campaigns.data?.campaigns) ? campaigns.data.campaigns : [];
-  const hotRows = Array.isArray(hotDeals.data?.products) ? hotDeals.data.products : [];
+  const campaignList = features.enable_campaign && Array.isArray(campaigns.data?.campaigns) ? campaigns.data.campaigns : [];
+  const hotRows = features.enable_hotdeal_product && Array.isArray(hotDeals.data?.products) ? hotDeals.data.products : [];
   const topCategories = categories.filter((c) => !c.parent_id);
 
   return (
@@ -127,7 +128,7 @@ export default function Home() {
         </section>
       )}
 
-      {(summary.loading || featuredRows.length > 0) && (
+      {features.enable_featured_product && (summary.loading || featuredRows.length > 0) && (
         <section className="section pt-0">
           <div className="container-x">
             <SectionHead title="ফিচার্ড পণ্য" sub="আমাদের বাছাই করা জনপ্রিয় পণ্য" />
