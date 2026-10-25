@@ -27,6 +27,18 @@
   --footer-line: rgba(255, 255, 255, 0.12);
   --cat-bg: #f5f5f5;
 
+  /* --- brand shades: a business's own colour (Website Theme) recomputes these,
+         see src/theme/websiteTheme.js; these are the design's own --- */
+  --accent-rgb: 244, 96, 10;
+  --accent-contrast: #ffffff;
+  --accent-soft-strong: #ebe1ff;
+  --accent-faint: #f7f5fd;
+  --accent-glow: #fdece1;
+  --accent-deep: #5b48b8;
+  --accent-light: #ffd29b;
+  --topbar-dot: rgba(255, 255, 255, 0.55);
+  --footer-chip: rgba(255, 255, 255, 0.1);
+
   /* --- radius / shadow --- */
   --radius-sm: 8px;
   --radius: 12px;
@@ -142,7 +154,7 @@ img {
 .btn-accent {
   background: var(--accent);
   border: 1px solid var(--accent);
-  color: #fff;
+  color: var(--accent-contrast, #fff);
   font-size: var(--fs-sm);
   padding: 10px 18px;
 }
@@ -151,7 +163,7 @@ img {
 .btn-accent:focus {
   background: var(--accent-dark);
   border-color: var(--accent-dark);
-  color: #fff;
+  color: var(--accent-contrast, #fff);
 }
 
 .btn-ink {
@@ -189,7 +201,7 @@ img {
 }
 
 .btn-soft:hover {
-  background: #ebe1ff;
+  background: var(--accent-soft-strong);
   color: var(--ink);
 }
 
@@ -232,7 +244,7 @@ img {
 .form-control:focus,
 .form-select:focus {
   border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(244, 96, 10, 0.12);
+  box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.12);
 }
 
 .form-check-input:checked {
@@ -274,7 +286,7 @@ img {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, .55);
+  background: var(--topbar-dot);
 }
 
 @keyframes marquee {
@@ -337,7 +349,7 @@ img {
   height: 36px;
   border-radius: 50%;
   background: var(--accent);
-  color: #fff;
+  color: var(--accent-contrast, #fff);
   border: 0;
   display: grid;
   place-items: center;
@@ -370,7 +382,7 @@ img {
 }
 
 .icon-btn:hover {
-  background: #e8ddff;
+  background: var(--accent-soft-strong);
   color: var(--accent);
 }
 
@@ -383,7 +395,7 @@ img {
   padding: 0 5px;
   border-radius: var(--radius-pill);
   background: var(--accent);
-  color: #fff;
+  color: var(--accent-contrast, #fff);
   font-size: var(--fs-3xs);
   font-weight: 700;
   display: grid;
@@ -426,7 +438,7 @@ img {
 
 .nav-hot {
   background: var(--accent);
-  color: #fff;
+  color: var(--accent-contrast, #fff);
   font-size: var(--fs-3xs);
   font-weight: 700;
   padding: 2px 8px;
@@ -561,7 +573,7 @@ img {
 
 .swiper-nav:hover {
   background: var(--accent);
-  color: #fff;
+  color: var(--accent-contrast, #fff);
   border-color: var(--accent);
 }
 
@@ -670,7 +682,7 @@ img {
   left: 10px;
   z-index: 3;
   background: var(--accent);
-  color: #fff;
+  color: var(--accent-contrast, #fff);
   font-size: var(--fs-2xs);
   font-weight: 700;
   padding: 3px 9px;
@@ -728,7 +740,7 @@ img {
 }
 
 .p-wish.is-on {
-  color: #fff;
+  color: var(--accent-contrast, #fff);
   background: var(--accent);
 }
 
@@ -1139,7 +1151,7 @@ img {
   display: grid;
   place-items: center;
   padding: 48px 0;
-  background: radial-gradient(900px 340px at 12% 20%, #fdece1 0%, transparent 60%),
+  background: radial-gradient(900px 340px at 12% 20%, var(--accent-glow) 0%, transparent 60%),
     radial-gradient(900px 340px at 88% 80%, var(--accent-soft) 0%, transparent 60%);
 }
 
@@ -1269,7 +1281,7 @@ img {
 }
 
 .acc-menu a:hover {
-  background: #f7f5fd;
+  background: var(--accent-faint);
   color: var(--accent);
 }
 
@@ -1308,7 +1320,7 @@ img {
   padding: 4px 10px;
   border-radius: var(--radius-pill);
   background: var(--accent-soft);
-  color: #5b48b8;
+  color: var(--accent-deep);
 }
 
 .status-pill.pending {
@@ -1501,7 +1513,7 @@ img {
 .pagination-x .pg.active {
   background: var(--accent);
   border-color: var(--accent);
-  color: #fff;
+  color: var(--accent-contrast, #fff);
 }
 
 .pagination-x .pg:hover {
@@ -1722,14 +1734,14 @@ img {
 }
 
 .site-footer .brand {
-  color: #fff;
+  color: var(--footer-text);
   font-size: var(--fs-5xl);
   display: inline-block;
   margin-bottom: 18px;
 }
 
 .site-footer h6 {
-  color: #fff;
+  color: var(--footer-text);
   font-size: var(--fs-xl);
   margin-bottom: 16px;
 }
@@ -1742,7 +1754,7 @@ img {
 }
 
 .site-footer a:hover {
-  color: #fff;
+  color: var(--footer-text);
 }
 
 .site-footer ul {
@@ -1768,10 +1780,10 @@ img {
   width: 34px;
   height: 34px;
   border-radius: var(--radius-sm);
-  background: rgba(255, 255, 255, .1);
+  background: var(--footer-chip);
   display: grid;
   place-items: center;
-  color: #fff;
+  color: var(--footer-text);
   font-size: var(--fs-lg);
 }
 
@@ -1803,7 +1815,7 @@ img {
 }
 
 .footer-bottom b {
-  color: #fff;
+  color: var(--footer-text);
 }
 
 /* ============ mobile header + bottom nav ============ */
@@ -2009,7 +2021,7 @@ img {
     position: absolute;
     transform: translate(14px, -6px);
     background: var(--accent);
-    color: #fff;
+    color: var(--accent-contrast, #fff);
     min-width: 16px;
     height: 16px;
     border-radius: 999px;
@@ -2320,7 +2332,7 @@ img {
 
 .pd-tabs button.active {
   background: var(--accent);
-  color: #fff;
+  color: var(--accent-contrast, #fff);
 }
 
 .pd-pane {
@@ -2519,7 +2531,7 @@ img {
 
 .reel-slide-side button.is-on {
   background: var(--accent);
-  color: #fff;
+  color: var(--accent-contrast, #fff);
 }
 
 .reel-slide-side small {
@@ -2676,7 +2688,7 @@ img {
   border: 0;
   border-radius: 50%;
   background: var(--accent);
-  color: #fff;
+  color: var(--accent-contrast, #fff);
   font-size: 1.5rem;
   box-shadow: var(--shadow-lg);
   cursor: pointer;
@@ -2813,7 +2825,7 @@ img {
   box-shadow: var(--shadow-sm);
   overflow-wrap: anywhere;
 }
-.chat-msg.is-mine .chat-bubble { background: var(--accent); color: #fff; border-radius: 14px 14px 4px 14px; }
+.chat-msg.is-mine .chat-bubble { background: var(--accent); color: var(--accent-contrast, #fff); border-radius: 14px 14px 4px 14px; }
 .chat-text { margin: 0; white-space: pre-wrap; font-size: var(--fs-sm); line-height: 1.45; }
 
 .chat-img { display: block; max-width: 220px; max-height: 200px; border-radius: 10px; margin-top: 6px; }
@@ -2886,7 +2898,7 @@ img {
   border: 0;
   border-radius: 50%;
   background: var(--accent);
-  color: #fff;
+  color: var(--accent-contrast, #fff);
   cursor: pointer;
 }
 .chat-send:disabled { opacity: .6; }
@@ -3015,7 +3027,7 @@ img {
   margin: 0 0 6px;
   font-size: var(--fs-sm);
   font-weight: 700;
-  color: #ffd29b;
+  color: var(--accent-light);
 }
 
 .campaign-hero__title {

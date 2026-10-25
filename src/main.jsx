@@ -16,6 +16,10 @@ import { WishlistProvider } from "./context/WishlistContext.jsx";
 import { CartProvider } from "./context/CartContext.jsx";
 import { UIProvider } from "./context/UIContext.jsx";
 import { ChatProvider } from "./context/ChatContext.jsx";
+import { restoreWebsiteTheme } from "./theme/websiteTheme.js";
+
+// the business's colours from the last visit, before the first paint (business/info brings today's)
+restoreWebsiteTheme();
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
