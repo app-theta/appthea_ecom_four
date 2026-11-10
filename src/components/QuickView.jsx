@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link } from "@/lib/router";
 import { money } from "../utils/format.js";
 import { headlinePrice, productImages, plain } from "../utils/product.js";
 import { useCart } from "../context/CartContext.jsx";

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link } from "@/lib/router";
 import { returns as returnsApi } from "../api/endpoints.js";
 import { parseApiError } from "../api/errors.js";
 import { useAsync } from "../hooks/useAsync.js";

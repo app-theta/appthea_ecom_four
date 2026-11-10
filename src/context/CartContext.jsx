@@ -1,4 +1,6 @@
-import { createContext, useContext, useEffect, useMemo, useState, useCallback } from "react";
+"use client";
+
+import { createContext, useContext, useEffect, useMemo, useRef, useState, useCallback } from "react";
 import { checkout as checkoutApi } from "../api/endpoints.js";
 import { barcodePrice, productImages, primaryBarcode } from "../utils/product.js";
 
@@ -22,9 +24,17 @@ const read = () => {
 };
 
 export function CartProvider({ children }) {
-  const [items, setItems] = useState(read);
+  // empty on the server and the first browser render alike; the saved cart arrives right after
+  const [items, setItems] = useState([]);
+  const loaded = useRef(false);
 
-  useEffect(() => { localStorage.setItem(KEY, JSON.stringify(items)); }, [items]);
+  useEffect(() => { setItems(read()); }, []);
+
+  useEffect(() => {
+    // the first run still holds the empty start - writing it would wipe the saved cart
+    if (!loaded.current) { loaded.current = true; return; }
+    try { localStorage.setItem(KEY, JSON.stringify(items)); } catch { /* ignore */ }
+  }, [items]);
 
   /** `product` is a full product resource from the API (needs .id, .name,
       .barcodes/.barcode, .thumbnail) - price/image are resolved once here,

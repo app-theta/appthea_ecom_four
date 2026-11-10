@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link } from "@/lib/router";
 import { money } from "../utils/format.js";
 import { useCart } from "../context/CartContext.jsx";
 import { useUI } from "../context/UIContext.jsx";

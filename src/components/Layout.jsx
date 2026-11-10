@@ -1,5 +1,7 @@
+"use client";
+
 import { useEffect } from "react";
-import { Outlet, useLocation } from "react-router-dom";
+import { useLocation } from "@/lib/router";
 import Header from "./Header.jsx";
 import Footer from "./Footer.jsx";
 import MobileNav from "./MobileNav.jsx";
@@ -11,7 +13,7 @@ import ChatWidget from "./chat/ChatWidget.jsx";
 import { useUI } from "../context/UIContext.jsx";
 import { useBusiness } from "../context/BusinessContext.jsx";
 
-export default function Layout() {
+export default function Layout({ children }) {
   const { cartOpen, menuOpen, closeAll } = useUI();
   const { closed } = useBusiness();
   const { pathname } = useLocation();
@@ -34,7 +36,7 @@ export default function Layout() {
   return (
     <>
       <Header />
-      <main><Outlet /></main>
+      <main>{children}</main>
       <Footer />
       <MobileNav />
       <ChatWidget />

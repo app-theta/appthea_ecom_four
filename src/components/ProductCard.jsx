@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "@/lib/router";
 import { money } from "../utils/format.js";
 import { headlinePrice, productImages, productInStock, ratingOf } from "../utils/product.js";
 import { useCart } from "../context/CartContext.jsx";

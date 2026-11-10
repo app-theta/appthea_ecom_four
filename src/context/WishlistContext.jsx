@@ -1,3 +1,5 @@
+"use client";
+
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { account } from "../api/endpoints.js";
 import { useAuth } from "./AuthContext.jsx";
